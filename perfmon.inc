@@ -110,13 +110,13 @@ function _perfmon_performance_tests() {
 function perfmon_test_server_configuration() {
   global $_SESSION;
 
-  $result = TRUE;
   $domain = $_SERVER['SERVER_NAME'];
   $port = $_SERVER['SERVER_PORT'];
   $request_uri = '/perfmon.test.php';
 
   $url = 'http://' . $domain . $request_uri;
 
+  $execcount = 5;
   $exectime = 0;
   $count = 10;
 
@@ -125,41 +125,47 @@ function perfmon_test_server_configuration() {
 
   $cookiestr = "";
 
+  file_put_contents('/tmp/test.log', "Start \r\n");
+
   foreach ($_COOKIE as $key => $value) {
     $cookiestr = $cookiestr . $key . "=" . $value . "; ";
   }
 
-  for($i = 0; $i < $count; $i++)
-  {
-      $ch = curl_init();
-      curl_setopt($ch, CURLOPT_URL, $url);
-      curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
-      curl_setopt($ch, CURLOPT_COOKIE, $cookiestr);
-      curl_setopt($ch, CURLOPT_PORT, $port);
-      curl_setopt($ch, CURLOPT_MAXREDIRS, 0);
-      curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-      $curl_arr[$i] = $ch;
+  for ($k = 0; $k < $execcount; $k++) {
 
-      curl_multi_add_handle($master, $curl_arr[$i]);
+    for($i = 0; $i < $count; $i++)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
+        curl_setopt($ch, CURLOPT_COOKIE, $cookiestr);
+        curl_setopt($ch, CURLOPT_PORT, $port);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 0);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $curl_arr[$i] = $ch;
+
+        curl_multi_add_handle($master, $curl_arr[$i]);
+    }
+
+    do {
+        curl_multi_exec($master,$running);
+    } while($running > 0);
+
+    for ($i=0; $i < $count; $i++) {
+
+      $info = curl_getinfo($curl_arr[$i]);
+
+      $exectime += $info['starttransfer_time'] - $info['pretransfer_time'];
+
+      curl_multi_remove_handle($master, $curl_arr[$i]);
+      curl_close($curl_arr[$i]);
+    }
+
+    sleep(2);
   }
 
-  do {
-      curl_multi_exec($master,$running);
-  } while($running > 0);
-
-
-  for ($i=0; $i < $count; $i++) {
-
-    $info = curl_getinfo($curl_arr[$i]);
-
-    $exectime += $info['starttransfer_time'] - $info['pretransfer_time'];
-
-    curl_multi_remove_handle($master, $curl_arr[$i]);
-    curl_close($curl_arr[$i]);
-  }
-
-  return array('result' => round(1 / ($exectime / $count), 0), 'value' => '0');
+  return array('result' => round(1 / ( $exectime / $execcount / $count ), 0), 'value' => '0');
 }
 
 /**
