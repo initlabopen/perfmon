@@ -440,7 +440,7 @@ function perfmon_get_mysql_performance_variables() {
   $performance_variables['query_cache_prunes_per_day'] = array(
     'value' => $query_cache_prunes_per_day,
     'title' => t('Query cache prunes per day'),
-    'display_value' => $query_cache_prunes_per_day,
+    'display_value' => round($query_cache_prunes_per_day, 2),
     'message' => t('Query cache prunes per day. If value grows rapidly you need to increase query_cache_size.'),
     'class' => 'ok',
   );
