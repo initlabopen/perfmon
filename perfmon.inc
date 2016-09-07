@@ -114,8 +114,6 @@ function perfmon_test_server_configuration() {
   $port = $_SERVER['SERVER_PORT'];
   $request_uri = '/'.drupal_get_path('module', 'perfmon').'/perfmon.test.php';
 
-  file_put_contents('/tmp/test.log', $request_uri);
-
   $url = 'http://' . $domain . $request_uri;
 
   $execcount = 5;
