@@ -112,7 +112,9 @@ function perfmon_test_server_configuration() {
 
   $domain = $_SERVER['SERVER_NAME'];
   $port = $_SERVER['SERVER_PORT'];
-  $request_uri = '/perfmon.test.php';
+  $request_uri = '/'.drupal_get_path('module', 'perfmon').'/perfmon.test.php';
+
+  file_put_contents('/tmp/test.log', $request_uri);
 
   $url = 'http://' . $domain . $request_uri;
 
@@ -124,8 +126,6 @@ function perfmon_test_server_configuration() {
   $master = curl_multi_init();
 
   $cookiestr = "";
-
-  file_put_contents('/tmp/test.log', "Start \r\n");
 
   foreach ($_COOKIE as $key => $value) {
     $cookiestr = $cookiestr . $key . "=" . $value . "; ";
