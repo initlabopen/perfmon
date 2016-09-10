@@ -228,6 +228,9 @@ function perfmon_test_db_prepare($testname, $count) {
 
 }
 
+/**
+ * Test db read operations.
+ */
 function perfmon_test_db_read() {
   $exectime = 0;
   $count = 1000;
@@ -242,7 +245,7 @@ function perfmon_test_db_read() {
     $query = db_select('perfmon_test', 'pt');
     $query->fields('pt', array('id', 'testname', 'data'));
     $query->condition('pt.id', $i, '=');
-    $result = $query->execute();
+    $query->execute();
   }
 
   $exectime = microtime(TRUE) - $exectime;
@@ -250,6 +253,9 @@ function perfmon_test_db_read() {
   return array('result' => round( 1 / ($exectime / $count) , 0), 'value' => '0');
 }
 
+/**
+ * Test db write operations.
+ */
 function perfmon_test_db_write() {
   $exectime = 0;
   $count = 1000;
@@ -265,6 +271,9 @@ function perfmon_test_db_write() {
   return array('result' => round( 1 / ($exectime / $count) , 0), 'value' => '0');
 }
 
+/**
+ * Test db update operations.
+ */
 function perfmon_test_db_update() {
   $exectime = 0;
   $count = 1000;
@@ -281,7 +290,7 @@ function perfmon_test_db_update() {
       'data' => 'bbbbbbbbbbbbbbbbbbbbb',
     ));
     $query->condition('id', $i);
-    $num_updated = $query->execute();
+    $query->execute();
   }
 
   $exectime = microtime(TRUE) - $exectime;
@@ -328,22 +337,18 @@ function perfmon_convert2array($variables) {
   return $result;
 }
 
-function secondsToTime($seconds) {
+function _perfmon_secondsToTime($seconds) {
     $dtF = new \DateTime('@0');
     $dtT = new \DateTime("@$seconds");
     return $dtF->diff($dtT)->format(t('%a days, %h hours, %i minutes and %s seconds'));
 }
 
-function formatBytes($bytes, $precision = 2) {
+function _perfmon_formatBytes($bytes, $precision = 2) {
     $units = array('B', 'KB', 'MB', 'GB', 'TB');
-
     $bytes = max($bytes, 0);
     $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
     $pow = min($pow, count($units) - 1);
-
-    // Uncomment one of the following alternatives
     $bytes /= pow(1024, $pow);
-    // $bytes /= (1 << (10 * $pow));
 
     return round($bytes, $precision) . ' ' . $units[$pow];
 }
@@ -359,7 +364,7 @@ function perfmon_get_mysql_performance_variables() {
   $performance_variables['uptime'] = array(
     'value' => $uptime,
     'title' => t('MySQL Uptime'),
-    'display_value' => secondsToTime($uptime),
+    'display_value' => _perfmon_secondsToTime($uptime),
     'message' => t('MySQL Server Uptime'),
     'class' => 'ok'
   );
@@ -374,7 +379,7 @@ function perfmon_get_mysql_performance_variables() {
   $performance_variables['memory_global'] = array(
     'value' => $memory_global,
     'title' => t('Global Memory'),
-    'display_value' => formatBytes($memory_global),
+    'display_value' => _perfmon_formatBytes($memory_global),
     'message' => t('Global memory size (key_buffer_size + tmp_table_size + innodb_buffer_pool_size + innodb_additional_mem_pool_size + innodb_log_buffer_size + query_cache_size)'),
     'class' => 'ok'
   );
@@ -384,7 +389,7 @@ function perfmon_get_mysql_performance_variables() {
   $performance_variables['memory_per_connection'] = array(
     'value' => $memory_per_connection,
     'title' => t('Memory per connection'),
-    'display_value' => formatBytes($memory_per_connection),
+    'display_value' => _perfmon_formatBytes($memory_per_connection),
     'message' => t('Memory per connection (read_buffer_size + read_rnd_buffer_size + sort_buffer_size + thread_stack + join_buffer_size)'),
     'class' => 'ok'
   );
@@ -402,7 +407,7 @@ function perfmon_get_mysql_performance_variables() {
   $performance_variables['max_memory'] = array(
     'value' => $max_memory,
     'title' => 'Max. Memory',
-    'display_value' => formatBytes($max_memory),
+    'display_value' => _perfmon_formatBytes($max_memory),
     'message' => t('Max Mysql memory (Global memory + Memory per connection * Max connections). Check that this variable lower than 85% of server RAM.'),
     'class' => 'ok'
   );
@@ -410,7 +415,7 @@ function perfmon_get_mysql_performance_variables() {
   $performance_variables['query_cache_size'] = array(
     'value' => $variables['query_cache_size'],
     'title' => t('Query cache size'),
-    'display_value' => formatBytes($variables['query_cache_size']),
+    'display_value' => _perfmon_formatBytes($variables['query_cache_size']),
     'message' => t('Query cache size ( query_cache_size ). Recommended 128M'),
     'class' => 'ok',
   );
