@@ -84,15 +84,16 @@ function perfmon_requirements($phase) {
 
   switch ($phase) {
     case 'runtime':
-    $failed_checks = FALSE;
+      $checks = perfmon_get_stored_results();
+      $t = get_t();
 
       $url = url('admin/reports/perfmon');
       if (empty($checks)) {
         $severity = REQUIREMENT_WARNING;
-        $value = t('The Performance monitor testlist has not been run. <a href="!url">Run the checklist</a>', array('!url' => $url));
+        $value = $t('The Performance monitor testlist has not been run. <a href="!url">Run the checklist</a>', array('!url' => $url));
       }
       $requirements['perfmon'] = array(
-        'title' => t('Performance Monitor'),
+        'title' => $t('Performance Monitor'),
         'severity' => $severity,
         'value' => $value,
       );

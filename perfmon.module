@@ -147,7 +147,7 @@ function perfmon_run_store($tests) {
 function perfmon_store_results($results) {
   $saved = $to_save = 0;
   foreach ($results as $testname => $test) {
-    $num_deleted = db_delete('perfmon')
+    db_delete('perfmon')
       ->condition('testname', $testname)
       ->execute();
 
@@ -161,7 +161,7 @@ function perfmon_store_results($results) {
     if (drupal_write_record('perfmon', $record) == SAVED_NEW) {
       $saved++;
     }
-    elseif ($log) {
+    else {
       _perfmon_log($testname, 'Unable to store test !testname', array('!testname' => $testname), WATCHDOG_ERROR);
     }
 
@@ -206,7 +206,7 @@ function _perfmon_batch_finished($success, $results, $operations) {
   if ($success) {
     if (!empty($results)) {
       // Store results in our present table.
-      $storage_result = perfmon_store_results($results);
+      perfmon_store_results($results);
     }
     drupal_set_message(t('Review complete'));
   }
