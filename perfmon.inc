@@ -6,14 +6,18 @@
  */
 
 // Define the version of this file in case it's used outside of its module.
-define('perfmon_VERSION', '7.x-1.1');
+define('PERFMON_VERSION', '7.x-1.1');
 
 /**
  * Public function for running Perfmon tests and returning results.
  *
- * @param array $testlist Array of tests to run, indexed by testname.
- * @param boolean $log Whether to log test processing using perfmon_log.
- * @return array Results from running checklist, indexed by module namespace.
+ * @param array $testlist
+ *   Array of tests to run, indexed by testname.
+ * @param bool $log
+ *   Whether to log test processing using perfmon_log.
+ *
+ * @return array
+ *   Results from running checklist, indexed by module namespace.
  */
 function perfmon_run($testlist = NULL, $log = FALSE) {
   if (!$testlist) {
@@ -57,7 +61,8 @@ function _perfmon_run_test($test_name, $test, $log, $store = FALSE) {
   $test_result = array_merge($test, $return);
   $test_result['lastrun'] = REQUEST_TIME;
 
-  if ($log && !is_null($return['result'])) { // Do not log if result is NULL.
+  if ($log && !is_null($return['result'])) {
+    // Do not log if result is NULL.
     $variables = array('!name' => $test_result['title']);
     _perfmon_log($test_name, '!name tested', $variables, WATCHDOG_INFO);
   }
@@ -131,7 +136,7 @@ function perfmon_test_server_configuration() {
 
   for ($k = 0; $k < $execcount; $k++) {
 
-    for($i = 0; $i < $count; $i++)
+    for ($i = 0; $i < $count; $i++)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -148,7 +153,7 @@ function perfmon_test_server_configuration() {
 
     do {
         curl_multi_exec($master,$running);
-    } while($running > 0);
+    } while ($running > 0);
 
     for ($i=0; $i < $count; $i++) {
 
