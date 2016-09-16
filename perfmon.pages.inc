@@ -46,11 +46,7 @@ function perfmon_reviewed($testlist, $tests) {
     $message = $testlist[$test['testname']]['title'];
     $title = t('OK');
     $class = 'ok';
-    $toggle = t('Skip');
     $token = drupal_get_token($test['testname']);
-    $link_options = array(
-      'query' => array('token' => $token),
-    );
 
     $bold = FALSE;
     if ($test['testname'] == 'config') {
@@ -73,7 +69,6 @@ function perfmon_reviewed($testlist, $tests) {
 }
 
 function perfmon_mysql_page() {
-  $mysqlstatus = array();
   $output = array();
   // Retrieve the testlist.
   module_load_include('inc', 'perfmon');
@@ -161,8 +156,6 @@ function perfmon_run_form_submit($form, &$form_state) {
 }
 
 function theme_perfmon_reviewed($variables) {
-  // @todo
-  //drupal_add_js(drupal_get_path('module', 'perfmon') . '/perfmon.js', array('scope' => 'footer'));
   $output = '<h3>' . $variables['header'] . '</h3>';
   $output .= '<p>' . $variables['description'] . '</p>';
   $output .= '<table class="system-status-report">';
@@ -174,12 +167,14 @@ function theme_perfmon_reviewed($variables) {
       } else {
         $output .= '<tr class="' . $item['class'] . '">';
       }
-      $output .= '<td class="status-icon"><div title="' . $item['title'] . '"><span class="element-invisible">' . $item['title'] . '</span></div></td>';
+      $output .= '<td class="status-icon"><div title="' . $item['title'] .
+        '"><span class="element-invisible">' . $item['title'] . '</span></div></td>';
       $output .= '<td>' . $item['message'] . '</td>';
       $output .= '<td>' . $item['value'] . '</td>';
       $output .= '</tr>';
     }
   }
+
   $output .= '</table>';
   return $output;
 }
@@ -196,12 +191,14 @@ function theme_perfmon_mysql_reviewed($variables) {
       } else {
         $output .= '<tr class="' . $item['class'] . '">';
       }
+
       $output .= '<td>' . $item['title'] . '</td>';
       $output .= '<td>' . $item['value'] . '</td>';
       $output .= '<td>' . $item['message'] . '</td>';
       $output .= '</tr>';
     }
   }
+
   $output .= '</table>';
   return $output;
 }
