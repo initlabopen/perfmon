@@ -188,7 +188,8 @@ function theme_perfmon_mysql_reviewed($variables) {
 
       if ($item['bold']) {
         $output .= '<tr class="' . $item['class'] . '" style="font-size:medium; font-weight:bold;">';
-      } else {
+      }
+      else {
         $output .= '<tr class="' . $item['class'] . '">';
       }
 
