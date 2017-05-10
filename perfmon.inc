@@ -11,7 +11,7 @@ define('PERFMON_VERSION', '7.x-1.1');
 /**
  * Public function for running Perfmon tests and returning results.
  *
- * @param array $testlist
+ * @param $testlist
  *   Array of tests to run, indexed by testname.
  * @param bool $log
  *   Whether to log test processing using perfmon_log.
@@ -110,7 +110,7 @@ function _perfmon_performance_tests() {
 }
 
 /**
- * Test configuration
+ * Test configuration.
  */
 function perfmon_test_server_configuration() {
   global $_SESSION;
@@ -167,7 +167,10 @@ function perfmon_test_server_configuration() {
     sleep(2);
   }
 
-  return array('result' => round(1 / ($exectime / $execcount / $count), 0), 'value' => '0');
+  return array(
+    'result' => round(1 / ($exectime / $execcount / $count), 0),
+    'value' => '0',
+  );
 }
 
 /**
@@ -194,7 +197,7 @@ function perfmon_test_cpu() {
 
   }
 
-  return array('result' => round(1 / ($exectime / $count), 0 ), 'value' =>'0');
+  return array('result' => round(1 / ($exectime / $count), 0), 'value' => '0');
 }
 
 /**
@@ -209,7 +212,7 @@ function perfmon_test_filesop() {
   for ($i = 0; $i < $count; $i++) {
     $filecont = "<?php phpinfo(); print(''" . $i . "'')";
     $filename = $tempdir . "/phptest" . $i . ".php";
-    $file = fopen( $filename, "w" );
+    $file = fopen($filename, "w");
     fwrite($file, $filecont);
     unlink($filename);
   }
@@ -218,9 +221,12 @@ function perfmon_test_filesop() {
   return array('result' => round(1 / ($exectime / $count), 0), 'value' => '0');
 }
 
+/**
+ * Prepare to test mysql
+ */
 function perfmon_test_db_prepare($testname, $count) {
 
-  for ($i=0; $i < $count; $i++) {
+  for ($i = 0; $i < $count; $i++) {
     db_insert('perfmon_test')
       ->fields(array(
         'id' => $i,
@@ -317,6 +323,9 @@ function perfmon_get_testlist() {
   return $tests;
 }
 
+/**
+ * Mysql variables.
+ */
 function perfmon_get_mysqlvariables() {
   $mysqlvariables = db_query("SHOW GLOBAL VARIABLES")->fetchAll();
   $result = perfmon_convert2array($mysqlvariables);
@@ -324,6 +333,9 @@ function perfmon_get_mysqlvariables() {
   return $result;
 }
 
+/**
+ * Mysql status.
+ */
 function perfmon_get_mysqlstatus() {
   $mysqlstatus = db_query("SHOW GLOBAL STATUS")->fetchAll();
   $result = perfmon_convert2array($mysqlstatus);
@@ -331,6 +343,9 @@ function perfmon_get_mysqlstatus() {
   return $result;
 }
 
+/**
+ * Convert 2 array.
+ */
 function perfmon_convert2array($variables) {
   $result = array();
 
@@ -341,12 +356,18 @@ function perfmon_convert2array($variables) {
   return $result;
 }
 
+/**
+ * Convert seconds to time.
+ */
 function _perfmon_seconds_to_time($seconds) {
   $dtF = new \DateTime('@0');
   $dtT = new \DateTime("@$seconds");
   return $dtF->diff($dtT)->format(t('%a days, %h hours, %i minutes and %s seconds'));
 }
 
+/**
+ * Format bytes.
+ */
 function _perfmon_format_bytes($bytes, $precision = 2) {
   $units = array('B', 'KB', 'MB', 'GB', 'TB');
   $bytes = max($bytes, 0);
@@ -357,6 +378,9 @@ function _perfmon_format_bytes($bytes, $precision = 2) {
   return round($bytes, $precision) . ' ' . $units[$pow];
 }
 
+/**
+ * Describes mysql performance variables.
+ */
 function perfmon_get_mysql_performance_variables() {
   $variables = perfmon_get_mysqlvariables();
   $status = perfmon_get_mysqlstatus();
@@ -527,6 +551,9 @@ function perfmon_get_mysql_performance_variables() {
   return $performance_variables;
 }
 
+/**
+ * Log.
+ */
 function _perfmon_log($module, $check_name, $message, $variables, $type) {
   module_invoke_all('perfmon_log', $module, $check_name, $message, $variables, $type);
 }
