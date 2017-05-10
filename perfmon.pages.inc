@@ -33,7 +33,7 @@ function perfmon_page() {
 }
 
 /**
- *  Main page output.
+ * Main page output.
  */
 function perfmon_reviewed($testlist, $tests) {
   $items = array();
@@ -50,7 +50,7 @@ function perfmon_reviewed($testlist, $tests) {
     $message = $testlist[$test['testname']]['title'];
     $title = t('OK');
     $class = 'ok';
-    //$token = drupal_get_token($test['testname']);
+
     $bold = FALSE;
     if ($test['testname'] == 'config') {
       $bold = TRUE;
@@ -67,7 +67,8 @@ function perfmon_reviewed($testlist, $tests) {
   $output = theme('perfmon_reviewed', array(
     'items' => $items,
     'header' => $header,
-    'description' => $desc));
+    'description' => $desc,
+  ));
 
   // @todo #markup?
   return array('#markup' => $output);
@@ -108,9 +109,6 @@ function perfmon_mysql_reviewed($performance_variables) {
     $value = $param['display_value'];
 
     $bold = FALSE;
-    // if ($test['testname'] == 'config') {
-    //   $bold = TRUE;
-    // }
     $items[] = array(
       'title' => $title,
       'bold' => $bold,
