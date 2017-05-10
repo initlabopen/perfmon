@@ -33,7 +33,7 @@ function perfmon_page() {
 }
 
 /**
- *  Main page output
+ *  Main page output.
  */
 function perfmon_reviewed($testlist, $tests) {
   $items = array();
@@ -74,7 +74,7 @@ function perfmon_reviewed($testlist, $tests) {
 }
 
 /**
- * Mysql settings page
+ * Mysql settings page.
  */
 function perfmon_mysql_page() {
   $output = array();
@@ -94,7 +94,7 @@ function perfmon_mysql_page() {
 }
 
 /**
- * Mysql settings page output
+ * Mysql settings page output.
  */
 function perfmon_mysql_reviewed($performance_variables) {
   $items = array();
@@ -120,13 +120,17 @@ function perfmon_mysql_reviewed($performance_variables) {
     );
   }
 
-  $output = theme('perfmon_mysql_reviewed', array('items' => $items, 'header' => $header, 'description' => $desc));
+  $output = theme('perfmon_mysql_reviewed', array(
+    'items' => $items,
+    'header' => $header,
+    'description' => $desc,
+  ));
 
   return array('#markup' => $output);
 }
 
 /**
- * Run button
+ * Run button.
  */
 function perfmon_run_form($form, &$form_state, $tests = NULL) {
   $form['run_form'] = array(
@@ -145,14 +149,15 @@ function perfmon_run_form($form, &$form_state, $tests = NULL) {
 }
 
 /**
- * Run all tests in batch
+ * Run all tests in batch.
  */
 function perfmon_run_form_submit($form, &$form_state) {
   module_load_include('inc', 'perfmon');
   $testlist = perfmon_get_testlist();
 
   // Use Batch to process the testlist.
-  $batch = array('operations' => array(),
+  $batch = array(
+    'operations' => array(),
     'title' => t('Performance test'),
     'progress_message' => t('Progress @current out of @total.'),
     'error_message' => t('An error occurred. Rerun the process or consult the logs.'),
@@ -163,15 +168,17 @@ function perfmon_run_form_submit($form, &$form_state) {
   foreach ($testlist as $test_name => $test) {
     // Each test is its own operation. There could be a case where a single
     // test needs to run itself a batch operation, perhaps @todo?
-    $batch['operations'][] = array('_perfmon_batch_op', array($test_name, $test, $log));
+    $batch['operations'][] = array(
+      '_perfmon_batch_op',
+      array($test_name, $test, $log),
+    );
   }
 
   batch_set($batch);
-  return;
 }
 
 /**
- * Theme main report
+ * Theme main report.
  */
 function theme_perfmon_reviewed($variables) {
   $output = '<h3>' . $variables['header'] . '</h3>';
@@ -181,7 +188,8 @@ function theme_perfmon_reviewed($variables) {
     foreach ($variables['items'] as $item) {
 
       if ($item['bold']) {
-        $output .= '<tr class="' . $item['class'] . '" style="font-size:medium; font-weight:bold;">'; }
+        $output .= '<tr class="' . $item['class'] . '" style="font-size:medium; font-weight:bold;">';
+      }
       else {
         $output .= '<tr class="' . $item['class'] . '">';
       }
@@ -198,7 +206,7 @@ function theme_perfmon_reviewed($variables) {
 }
 
 /**
- * Theme mysql report
+ * Theme mysql report.
  */
 function theme_perfmon_mysql_reviewed($variables) {
   $output = '<h3>' . $variables['header'] . '</h3>';
