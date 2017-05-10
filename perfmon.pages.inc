@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file perfmon.pages.inc
+ * @file
  * TODO: Enter file description here.
  */
 
@@ -50,8 +50,7 @@ function perfmon_reviewed($testlist, $tests) {
     $message = $testlist[$test['testname']]['title'];
     $title = t('OK');
     $class = 'ok';
-    $token = drupal_get_token($test['testname']);
-
+    //$token = drupal_get_token($test['testname']);
     $bold = FALSE;
     if ($test['testname'] == 'config') {
       $bold = TRUE;
