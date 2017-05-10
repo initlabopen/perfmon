@@ -102,7 +102,8 @@ function perfmon_theme($existing, $type, $theme, $path) {
 /**
  * Retrieve stored tests and results.
  *
- * @return array Array of checks with keys:
+ * @return array
+ *   Array of checks with keys:
  *   testname - string test name
  *   result - int result of test
  *   lastrun - UNIX timestamp of last time check ran
@@ -124,7 +125,8 @@ function perfmon_get_stored_results() {
 /**
  * Retrieve the result from the last run of test.
  *
- * @return array Return last results
+ * @return array
+ *   Return last results
  *
  * @see perfmon_get_stored_results()
  */
