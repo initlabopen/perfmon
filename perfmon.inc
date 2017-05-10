@@ -117,7 +117,7 @@ function perfmon_test_server_configuration() {
 
   $domain = $_SERVER['SERVER_NAME'];
   $port = $_SERVER['SERVER_PORT'];
-  $request_uri = '/'.drupal_get_path('module', 'perfmon').'/perfmon.test.php';
+  $request_uri = '/' . drupal_get_path('module', 'perfmon') . '/perfmon.test.php';
 
   $url = 'http://' . $domain . $request_uri;
 
@@ -136,26 +136,25 @@ function perfmon_test_server_configuration() {
 
   for ($k = 0; $k < $execcount; $k++) {
 
-    for ($i = 0; $i < $count; $i++)
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
-        curl_setopt($ch, CURLOPT_COOKIE, $cookiestr);
-        curl_setopt($ch, CURLOPT_PORT, $port);
-        curl_setopt($ch, CURLOPT_MAXREDIRS, 0);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $curl_arr[$i] = $ch;
+    for ($i = 0; $i < $count; $i++) {
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, $url);
+      curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
+      curl_setopt($ch, CURLOPT_COOKIE, $cookiestr);
+      curl_setopt($ch, CURLOPT_PORT, $port);
+      curl_setopt($ch, CURLOPT_MAXREDIRS, 0);
+      curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+      $curl_arr[$i] = $ch;
 
-        curl_multi_add_handle($master, $curl_arr[$i]);
+      curl_multi_add_handle($master, $curl_arr[$i]);
     }
 
     do {
-        curl_multi_exec($master,$running);
+      curl_multi_exec($master, $running);
     } while ($running > 0);
 
-    for ($i=0; $i < $count; $i++) {
+    for ($i = 0; $i < $count; $i++) {
 
       $info = curl_getinfo($curl_arr[$i]);
 
@@ -168,7 +167,7 @@ function perfmon_test_server_configuration() {
     sleep(2);
   }
 
-  return array('result' => round(1 / ( $exectime / $execcount / $count ), 0), 'value' => '0');
+  return array('result' => round(1 / ($exectime / $execcount / $count), 0), 'value' => '0');
 }
 
 /**
@@ -195,7 +194,7 @@ function perfmon_test_cpu() {
 
   }
 
-  return array('result' => round( 1 / ($exectime / $count) , 0 ), 'value' => '0');
+  return array('result' => round(1 / ($exectime / $count), 0 ), 'value' =>'0');
 }
 
 /**
@@ -216,7 +215,7 @@ function perfmon_test_filesop() {
   }
   $exectime = microtime(TRUE) - $exectime;
 
-  return array('result' => round( 1 / ($exectime / $count) , 0), 'value' => '0');
+  return array('result' => round(1 / ($exectime / $count), 0), 'value' => '0');
 }
 
 function perfmon_test_db_prepare($testname, $count) {
@@ -255,7 +254,7 @@ function perfmon_test_db_read() {
 
   $exectime = microtime(TRUE) - $exectime;
 
-  return array('result' => round( 1 / ($exectime / $count) , 0), 'value' => '0');
+  return array('result' => round(1 / ($exectime / $count), 0), 'value' => '0');
 }
 
 /**
@@ -273,7 +272,7 @@ function perfmon_test_db_write() {
 
   $exectime = microtime(TRUE) - $exectime;
 
-  return array('result' => round( 1 / ($exectime / $count) , 0), 'value' => '0');
+  return array('result' => round(1 / ($exectime / $count), 0), 'value' => '0');
 }
 
 /**
@@ -300,7 +299,7 @@ function perfmon_test_db_update() {
 
   $exectime = microtime(TRUE) - $exectime;
 
-  return array('result' => round( 1 / ($exectime / $count) , 0), 'value' => '0');
+  return array('result' => round(1 / ($exectime / $count), 0), 'value' => '0');
 }
 
 /**
@@ -342,20 +341,20 @@ function perfmon_convert2array($variables) {
   return $result;
 }
 
-function _perfmon_secondsToTime($seconds) {
-    $dtF = new \DateTime('@0');
-    $dtT = new \DateTime("@$seconds");
-    return $dtF->diff($dtT)->format(t('%a days, %h hours, %i minutes and %s seconds'));
+function _perfmon_seconds_to_time($seconds) {
+  $dtF = new \DateTime('@0');
+  $dtT = new \DateTime("@$seconds");
+  return $dtF->diff($dtT)->format(t('%a days, %h hours, %i minutes and %s seconds'));
 }
 
-function _perfmon_formatBytes($bytes, $precision = 2) {
-    $units = array('B', 'KB', 'MB', 'GB', 'TB');
-    $bytes = max($bytes, 0);
-    $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-    $pow = min($pow, count($units) - 1);
-    $bytes /= pow(1024, $pow);
+function _perfmon_format_bytes($bytes, $precision = 2) {
+  $units = array('B', 'KB', 'MB', 'GB', 'TB');
+  $bytes = max($bytes, 0);
+  $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+  $pow = min($pow, count($units) - 1);
+  $bytes /= pow(1024, $pow);
 
-    return round($bytes, $precision) . ' ' . $units[$pow];
+  return round($bytes, $precision) . ' ' . $units[$pow];
 }
 
 function perfmon_get_mysql_performance_variables() {
@@ -364,14 +363,13 @@ function perfmon_get_mysql_performance_variables() {
 
   $performance_variables = array();
 
-
   $uptime = $status['Uptime'];
   $performance_variables['uptime'] = array(
     'value' => $uptime,
     'title' => t('MySQL Uptime'),
-    'display_value' => _perfmon_secondsToTime($uptime),
+    'display_value' => _perfmon_seconds_to_time($uptime),
     'message' => t('MySQL Server Uptime'),
-    'class' => 'ok'
+    'class' => 'ok',
   );
 
   if ($uptime < 86400) {
@@ -384,9 +382,9 @@ function perfmon_get_mysql_performance_variables() {
   $performance_variables['memory_global'] = array(
     'value' => $memory_global,
     'title' => t('Global Memory'),
-    'display_value' => _perfmon_formatBytes($memory_global),
+    'display_value' => _perfmon_format_bytes($memory_global),
     'message' => t('Global memory size (key_buffer_size + tmp_table_size + innodb_buffer_pool_size + innodb_additional_mem_pool_size + innodb_log_buffer_size + query_cache_size)'),
-    'class' => 'ok'
+    'class' => 'ok',
   );
 
   $memory_per_connection = $variables['read_buffer_size'] + $variables['read_rnd_buffer_size'] +
@@ -394,9 +392,9 @@ function perfmon_get_mysql_performance_variables() {
   $performance_variables['memory_per_connection'] = array(
     'value' => $memory_per_connection,
     'title' => t('Memory per connection'),
-    'display_value' => _perfmon_formatBytes($memory_per_connection),
+    'display_value' => _perfmon_format_bytes($memory_per_connection),
     'message' => t('Memory per connection (read_buffer_size + read_rnd_buffer_size + sort_buffer_size + thread_stack + join_buffer_size)'),
-    'class' => 'ok'
+    'class' => 'ok',
   );
 
   $performance_variables['max_connections'] = array(
@@ -404,7 +402,7 @@ function perfmon_get_mysql_performance_variables() {
     'title' => 'Max connections',
     'display_value' => $variables['max_connections'],
     'message' => t('Max user connections ( max_connections )'),
-    'class' => 'ok'
+    'class' => 'ok',
   );
 
   $max_memory = $performance_variables['memory_global']['value'] +
@@ -412,21 +410,21 @@ function perfmon_get_mysql_performance_variables() {
   $performance_variables['max_memory'] = array(
     'value' => $max_memory,
     'title' => 'Max. Memory',
-    'display_value' => _perfmon_formatBytes($max_memory),
+    'display_value' => _perfmon_format_bytes($max_memory),
     'message' => t('Max Mysql memory (Global memory + Memory per connection * Max connections). Check that this variable lower than 85% of server RAM.'),
-    'class' => 'ok'
+    'class' => 'ok',
   );
 
   $performance_variables['query_cache_size'] = array(
     'value' => $variables['query_cache_size'],
     'title' => t('Query cache size'),
-    'display_value' => _perfmon_formatBytes($variables['query_cache_size']),
+    'display_value' => _perfmon_format_bytes($variables['query_cache_size']),
     'message' => t('Query cache size ( query_cache_size ). Recommended 128M'),
     'class' => 'ok',
   );
 
   if ($variables['query_cache_size'] != (1024 * 1024 * 128)) {
-    $performance_variables['query_cache_size']['message'] = t( 'Query cache size query_cache_size. Recommended 128M. Increasing the query_cache size over 128M may reduce performance.' );
+    $performance_variables['query_cache_size']['message'] = t('Query cache size query_cache_size. Recommended 128M. Increasing the query_cache size over 128M may reduce performance.');
     $performance_variables['query_cache_size']['class'] = 'error';
   }
 
@@ -436,7 +434,7 @@ function perfmon_get_mysql_performance_variables() {
     'title' => t('Query cache efficiency'),
     'display_value' => round($query_cache_efficiency * 100, 2) . '%',
     'message' => t('Query cache efficiency'),
-    'class' => 'ok'
+    'class' => 'ok',
   );
 
   if ($query_cache_efficiency < 0.2) {
@@ -444,7 +442,7 @@ function perfmon_get_mysql_performance_variables() {
     $performance_variables['query_cache_efficiency']['class'] = 'error';
   }
 
-  $query_cache_prunes_per_day = $status['Qcache_lowmem_prunes'] / ( $status['Uptime'] / 86400 );
+  $query_cache_prunes_per_day = $status['Qcache_lowmem_prunes'] / ($status['Uptime'] / 86400);
   $performance_variables['query_cache_prunes_per_day'] = array(
     'value' => $query_cache_prunes_per_day,
     'title' => t('Query cache prunes per day'),
@@ -474,7 +472,6 @@ function perfmon_get_mysql_performance_variables() {
   if ($total_sorts_temp > 0.1) {
     $performance_variables['total_sorts_temp']['class'] = 'error';
   }
-
 
   $created_tmp_tables_dsk = $status['Created_tmp_disk_tables'] / $status['Created_tmp_tables'];
   $performance_variables['created_tmp_tables_dsk'] = array(
