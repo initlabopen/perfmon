@@ -2,6 +2,7 @@
 
 /**
  * @file perfmon.pages.inc
+ * TODO: Enter file description here.
  */
 
 /**
@@ -31,6 +32,9 @@ function perfmon_page() {
   return $output;
 }
 
+/**
+ *  Main page output
+ */
 function perfmon_reviewed($testlist, $tests) {
   $items = array();
   $last_run = variable_get('perfmon_last_run', '');
@@ -52,8 +56,6 @@ function perfmon_reviewed($testlist, $tests) {
     if ($test['testname'] == 'config') {
       $bold = TRUE;
     }
-
-
     $items[] = array(
       'title' => $title,
       'bold' => $bold,
@@ -63,11 +65,18 @@ function perfmon_reviewed($testlist, $tests) {
       'help_link' => l(t('Details'), 'admin/reports/perfmon/help/' . $test['testname']),
     );
   }
-  $output = theme('perfmon_reviewed', array('items' => $items, 'header' => $header, 'description' => $desc));
+  $output = theme('perfmon_reviewed', array(
+    'items' => $items,
+    'header' => $header,
+    'description' => $desc));
+
   // @todo #markup?
   return array('#markup' => $output);
 }
 
+/**
+ * Mysql settings page
+ */
 function perfmon_mysql_page() {
   $output = array();
   // Retrieve the testlist.
@@ -85,6 +94,9 @@ function perfmon_mysql_page() {
   return $output;
 }
 
+/**
+ * Mysql settings page output
+ */
 function perfmon_mysql_reviewed($performance_variables) {
   $items = array();
   $header = t('MySQL Performance');
@@ -100,7 +112,6 @@ function perfmon_mysql_reviewed($performance_variables) {
     // if ($test['testname'] == 'config') {
     //   $bold = TRUE;
     // }
-
     $items[] = array(
       'title' => $title,
       'bold' => $bold,
@@ -115,7 +126,9 @@ function perfmon_mysql_reviewed($performance_variables) {
   return array('#markup' => $output);
 }
 
-
+/**
+ * Run button
+ */
 function perfmon_run_form($form, &$form_state, $tests = NULL) {
   $form['run_form'] = array(
     '#type' => 'fieldset',
@@ -132,6 +145,9 @@ function perfmon_run_form($form, &$form_state, $tests = NULL) {
   return $form;
 }
 
+/**
+ * Run all tests in batch
+ */
 function perfmon_run_form_submit($form, &$form_state) {
   module_load_include('inc', 'perfmon');
   $testlist = perfmon_get_testlist();
@@ -155,6 +171,9 @@ function perfmon_run_form_submit($form, &$form_state) {
   return;
 }
 
+/**
+ * Theme main report
+ */
 function theme_perfmon_reviewed($variables) {
   $output = '<h3>' . $variables['header'] . '</h3>';
   $output .= '<p>' . $variables['description'] . '</p>';
@@ -163,8 +182,8 @@ function theme_perfmon_reviewed($variables) {
     foreach ($variables['items'] as $item) {
 
       if ($item['bold']) {
-        $output .= '<tr class="' . $item['class'] . '" style="font-size:medium; font-weight:bold;">';
-      } else {
+        $output .= '<tr class="' . $item['class'] . '" style="font-size:medium; font-weight:bold;">'; }
+      else {
         $output .= '<tr class="' . $item['class'] . '">';
       }
       $output .= '<td class="status-icon"><div title="' . $item['title'] .
@@ -179,13 +198,15 @@ function theme_perfmon_reviewed($variables) {
   return $output;
 }
 
+/**
+ * Theme mysql report
+ */
 function theme_perfmon_mysql_reviewed($variables) {
   $output = '<h3>' . $variables['header'] . '</h3>';
   $output .= '<p>' . $variables['description'] . '</p>';
   $output .= '<table class="system-status-report">';
   if (!empty($variables['items'])) {
     foreach ($variables['items'] as $item) {
-
       if ($item['bold']) {
         $output .= '<tr class="' . $item['class'] . '" style="font-size:medium; font-weight:bold;">';
       }
