@@ -10,11 +10,11 @@
  */
 function perfmon_help($path, $arg) {
   switch ($path) {
-    // Main module help for the block module
+    // Main module help for the block module.
     case 'admin/help#block':
       return '<p>' . t('Blocks are boxes of content rendered into an area, or region, of a web page. The default theme Bartik, for example, implements the regions "Sidebar first", "Sidebar second", "Featured", "Content", "Header", "Footer", etc., and a block may appear in any one of these areas. The <a href="@blocks">blocks administration page</a> provides a drag-and-drop interface for assigning a block to a region, and for controlling the order of blocks within regions.', array('@blocks' => url('admin/structure/block'))) . '</p>';
 
-    // Help for another path in the block module
+    // Help for another path in the block module.
     case 'admin/structure/block':
       return '<p>' . t('This page provides a drag-and-drop interface for assigning a block to a region, and for controlling the order of blocks within regions. Since not all themes implement the same regions, or display regions in the same way, blocks are positioned on a per-theme basis. Remember that your changes will not be saved until you click the <em>Save blocks</em> button at the bottom of the page.') . '</p>';
   }
@@ -53,7 +53,7 @@ function perfmon_menu() {
     'type' => MENU_LOCAL_TASK,
     'page callback' => 'perfmon_mysql_page',
     'file' => 'perfmon.pages.inc',
-    'access arguments' => array('access performance monitor report')
+    'access arguments' => array('access performance monitor report'),
   );
 
   return $items;
@@ -81,13 +81,21 @@ function perfmon_permission() {
 function perfmon_theme($existing, $type, $theme, $path) {
   return array(
     'perfmon_reviewed' => array(
-      'variables' => array('items' => array(), 'header' => '', 'description' => ''),
-      'file' => 'perfmon.pages.inc',
+      'variables' => array(
+        'items' => array(),
+        'header' => '',
+        'description' => '',
       ),
+      'file' => 'perfmon.pages.inc',
+    ),
     'perfmon_mysql_reviewed' => array(
-      'variables' => array('items' => array(), 'header' => '', 'description' => ''),
-      'file' => 'perfmon.pages.inc',
+      'variables' => array(
+        'items' => array(),
+        'header' => '',
+        'description' => '',
       ),
+      'file' => 'perfmon.pages.inc',
+    ),
   );
 }
 
@@ -95,9 +103,9 @@ function perfmon_theme($existing, $type, $theme, $path) {
  * Retrieve stored tests and results.
  *
  * @return array Array of checks with keys:
- *     testname - string test name
- *     result - int result of test
- *     lastrun - UNIX timestamp of last time check ran
+ *   testname - string test name
+ *   result - int result of test
+ *   lastrun - UNIX timestamp of last time check ran
  */
 function perfmon_get_stored_results() {
   $tests = array();
@@ -116,8 +124,9 @@ function perfmon_get_stored_results() {
 /**
  * Retrieve the result from the last run of test.
  *
- * @return array
- *   @see perfmon_get_stored_results() for format
+ * @return array Return last results
+ *
+ * @see perfmon_get_stored_results()
  */
 function perfmon_get_last_test($testname) {
   $fields = array('testname', 'result', 'lastrun');
@@ -211,9 +220,9 @@ function _perfmon_batch_finished($success, $results, $operations) {
     drupal_set_message(t('Review complete'));
   }
   else {
-   $error_operation = reset($operations);
-   $message = 'An error occurred while processing ' . $error_operation[0] . ' with arguments :' . print_r($error_operation[0], TRUE);
-   _perfmon_log('', '', $message, array(), WATCHDOG_ERROR);
+    $error_operation = reset($operations);
+    $message = 'An error occurred while processing ' . $error_operation[0] . ' with arguments :' . print_r($error_operation[0], TRUE);
+    _perfmon_log('', '', $message, array(), WATCHDOG_ERROR);
     drupal_set_message(t('The review did not store all results, please run again or check the logs for details.'));
   }
 }
