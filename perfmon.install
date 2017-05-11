@@ -3,14 +3,13 @@
 /**
  * @file
  * Install, update and uninstall functions for the perfmon module.
- *
  */
 
 /**
  * Implements hook_enable().
  */
 function perfmon_enable() {
-  drupal_set_message(t('Performance Monitor module enabled. You should first set the module access permissions at !link. Be sure to grant permissions to trusted users only as this module can show senstive site information.', array('!link' => l('admin/people/permissions', 'admin/people/permissions'))));
+  drupal_set_message(t('Performance Monitor module enabled. You should first set the module access permissions at !link. Be sure to grant permissions to trusted users only as this module can show senstive site information.', array('!link' => l(t('admin/people/permissions'), 'admin/people/permissions'))));
 }
 
 /**
