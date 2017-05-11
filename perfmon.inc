@@ -11,7 +11,7 @@ define('PERFMON_VERSION', '7.x-1.1');
 /**
  * Public function for running Perfmon tests and returning results.
  *
- * @param array
+ * @param array $testlist
  *   Array of tests to run, indexed by testname.
  * @param bool $log
  *   Whether to log test processing using perfmon_log.
