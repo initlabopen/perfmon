@@ -19,7 +19,7 @@ define('PERFMON_VERSION', '7.x-1.1');
  * @return array
  *   Results from running checklist, indexed by module namespace.
  */
-function perfmon_run($testlist = NULL, $log = FALSE) {
+function perfmon_run(array $testlist = NULL, $log = FALSE) {
   if (!$testlist) {
     $testlist = _perfmon_performance_tests();
   }
