@@ -117,7 +117,7 @@ function perfmon_test_server_configuration() {
 
   $domain = $_SERVER['SERVER_NAME'];
   $port = $_SERVER['SERVER_PORT'];
-  $request_uri = '/' . drupal_get_path('module', 'perfmon') . '/perfmon.test.php';
+  $request_uri = '/perfmon.test.php';
 
   $url = 'http://' . $domain . $request_uri;
 
