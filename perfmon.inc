@@ -114,12 +114,13 @@ function _perfmon_performance_tests() {
  */
 function perfmon_test_server_configuration() {
   global $_SESSION;
+  global $base_url;
 
   $domain = $_SERVER['SERVER_NAME'];
   $port = $_SERVER['SERVER_PORT'];
   $request_uri = '/perfmon.test.php';
 
-  $url = 'http://' . $domain . $request_uri;
+  $url = $base_url . $request_uri;
 
   $execcount = 5;
   $exectime = 0;
